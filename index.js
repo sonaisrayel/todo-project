@@ -10,6 +10,8 @@ const { v4: uuidv4 } = require('uuid');
 
 app.use(bodyParser.json())
 
+
+
 app.post('/todos', (req, res) => {
 
     const { title,description,completed } = req.body
@@ -26,11 +28,6 @@ app.post('/todos', (req, res) => {
     return res.status(404).send({message:'Todo is exists'})
 })
 
-
-app.post('/todos',(req,res)=> {
-    const {id} =  req.body
-
-})
 
 
 app.listen(port, () => {
