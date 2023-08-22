@@ -1,8 +1,6 @@
-const fs = require('fs');
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const { log } = require('console');
 const app = express();
 const port = 3000;
 app.use(bodyParser.json())
