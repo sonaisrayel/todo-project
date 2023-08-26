@@ -28,8 +28,37 @@ app.post('/todos', (req, res) => {
     return res.status(404).send({message:'Todo is exists'})
 })
 
+app.put('/todos/complete', (req, res) => {
+
+    const { id,completed } = req.body
+
+    
+
+    let file=fs.readFileSync("todo.json", 'utf8')
+    let file1=JSON.parse(file)
+    file1.forEach(el =>{
+        if (id == el.id){
+            el.completed=true
+              
+        }
+    })
+    fs.writeFileSync("todo.json",JSON.stringify(file1,null,2))
+    let file2=fs.readFileSync("todo.json", 'utf8')
+    let file3=JSON.parse(file2)
+    let result = file3.find(item => item.id === req.body.id);
+    res.send(result)
+})
 
 
 app.listen(port, () => {
     console.log(`Server working on port ${port}`);
 })
+
+
+
+// Update Todo
+// Method: PUT/PATCH
+// Endpoint: /todos/complete
+// Request Body: { "id": "idOfTodo", "completed": true }
+// Response: Updated todo details
+
