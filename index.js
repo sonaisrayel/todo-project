@@ -10,8 +10,6 @@ const { v4: uuidv4 } = require('uuid');
 
 app.use(bodyParser.json())
 
-
-
 app.delete('/todos', (req, res) => {
 
     const { id, title, description, completed } = req.body
