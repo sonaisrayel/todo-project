@@ -8,7 +8,7 @@
   {
     "title": "Todo Title5",
     "description": "Some Description",
-    "completed": false,
+    "completed": true,
     "id": 2
   },
   {

@@ -7,7 +7,7 @@ const fs= require('fs');
 const data = require('./todo.json');
 
 const { v4: uuidv4 } = require('uuid');
-const { log } = require('util');
+
 
 
 app.use(bodyParser.json())
@@ -32,21 +32,48 @@ app.post('/todos', (req, res) => {
 
 app.put('/todos/complete', (req, res) => {
 
-    const { id,completed } = req.body
-
+  
+    const { id } = req.body
+    const todoId = parseInt(id);
+    const result_of_id = data.findIndex(d=> d.id === todoId);
+    
+    
+    if (result_of_id === -1){
+        return  res.status(404).send({message: 'Todo not found'})
+    }
     
     data.forEach(el =>{
-        if (id == el.id){
+        if (todoId === el.id){
             el.completed=true
               
         }
     })
     fs.writeFileSync("todo.json",JSON.stringify(data,null,2))
 
-    let result = data.find(item => item.id === req.body.id);
-    res.send(result)
+    let result = data.find(item => item.id === todoId);
+    res.status(200).send(result);
 })
 
+
+
+
+
+app.get ('/todos/complete', (req, res) => {
+    
+    function taskCompl(){
+        let compTasks=[]
+        data.forEach(el =>{
+        
+        if (el.completed==true){
+            compTasks.push(el)
+        }
+        
+        })
+        return compTasks
+    }
+    res.send(taskCompl()) 
+})
+    
 
 app.listen(port, () => {
     console.log(`Server working on port ${port}`);
