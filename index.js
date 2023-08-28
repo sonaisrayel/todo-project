@@ -20,11 +20,8 @@ app.delete('/todos/:id', (req, res) => {
         return res.status(404).send(`todo with id ${id} does not exsists`)
     }
 
-
-    data.forEach(element => {
-        let index = data.findIndex(el => el.id === id);
-        data.splice(index, 1);
-    })
+    let index = data.findIndex(el => el.id === id);
+    data.splice(index, 1);
 
     fs.writeFileSync("todo.json", JSON.stringify(data, null, 2));
     return res.status(200).send(`Title with id "${id}" successfully deleted`)
