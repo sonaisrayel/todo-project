@@ -1,0 +1,47 @@
+[
+  {
+    "id": "3d88fef1-4c30-480f-95d7-29df5fcbd648",
+    "username": "meeeeeriko1",
+    "email": "asd1@gmail.com",
+    "password": "1232qwewqwred1",
+    "dateOfRegistration": "2023-8-27",
+    "gender": "female",
+    "birthday": "1999-04-05"
+  },
+  {
+    "id": "533ffbca-f57b-4907-8402-e4b41070869b",
+    "username": "meeeeeeeriko2",
+    "email": "asd2@gmail.com",
+    "password": "1232qwewqwred1",
+    "dateOfRegistration": "2023-8-27",
+    "gender": "female",
+    "birthday": "1999-04-05"
+  },
+  {
+    "id": "6cc42c75-be20-48f7-b5df-d5615e9d7401",
+    "username": "meeeeeeeriko3",
+    "email": "asd3@gmail.com",
+    "password": "1232qwewqwred1",
+    "dateOfRegistration": "2023-8-27",
+    "gender": "female",
+    "birthday": "1999-04-05"
+  },
+  {
+    "id": "e8ec44d2-8a4d-4ec8-ad39-7a19ddb1530a",
+    "username": "meeeeeeeriko4",
+    "email": "asd4@gmail.com",
+    "password": "1232qwewqwred1",
+    "dateOfRegistration": "2023-8-27",
+    "gender": "female",
+    "birthday": "2004-04-05"
+  },
+  {
+    "id": "8aa9a131-f064-49c5-acce-2764f2ebb569",
+    "username": "meeeeeeeriko5",
+    "email": "asd6@gmail.com",
+    "password": "1232qwewqwred1",
+    "dateOfRegistration": "2023-8-27",
+    "gender": "female",
+    "birthday": "2004-04-05"
+  }
+]
