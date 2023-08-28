@@ -3,7 +3,7 @@
     "id": 1,
     "title": "Todo Title1",
     "description": "Some Description",
-    "completed": false
+    "completed": true
   },
   {
     "title": "Todo Title5",
@@ -14,7 +14,7 @@
   {
     "title": "Todo Title6",
     "description": "Some Description",
-    "completed": false,
+    "completed": true,
     "id": 3
   },
   {
