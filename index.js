@@ -4,9 +4,15 @@ const app = express();
 const port = 3000;
 const fs = require('fs');
 const data = require('./todo.json');
+
 const { v4: uuidv4 } = require('uuid');
 
-app.use(bodyParser.json());
+
+
+
+app.use(bodyParser.json())
+
+
 
 app.post('/todos', (req, res) => {
     const { title, description, completed } = req.body;
@@ -23,29 +29,50 @@ app.post('/todos', (req, res) => {
     return res.status(404).send({ message: 'Todo is exists' });
 });
 
-app.put('/todos/complete', (req, res) => {
-    const { id } = req.body;
-
-    const file = fs.readFileSync('todo.json', 'utf8');
-    const file1 = JSON.parse(file);
-    file1.forEach((el) => {
-        if (id === el.id) {
-            el.completed = true;
+app.put('/todos/complete', (req, res) => {  
+    const { id } = req.body
+    const todoId = parseInt(id);
+    const result_of_id = data.findIndex(d=> d.id === todoId);
+    
+    
+    if (result_of_id === -1){
+        return  res.status(404).send({message: 'Todo not found'})
+    }
+    
+    data.forEach(el =>{
+        if (todoId === el.id){
+            el.completed=true
+              
         }
-    });
-    fs.writeFileSync('todo.json', JSON.stringify(file1, null, 2));
-    const file2 = fs.readFileSync('todo.json', 'utf8');
-    const file3 = JSON.parse(file2);
-    const result = file3.find((item) => item.id === req.body.id);
-    res.send(result);
-});
+    })
+    fs.writeFileSync("todo.json",JSON.stringify(data,null,2))
+
+    let result = data.find(item => item.id === todoId);
+    res.status(200).send(result);
+})
+
+
+
+
+
+app.get ('/todos/complete', (req, res) => {
+    
+    function taskCompl(){
+        let compTasks=[]
+        data.forEach(el =>{
+        
+        if (el.completed==true){
+            compTasks.push(el)
+        }
+        
+        })
+        return compTasks
+    }
+    res.send(taskCompl()) 
+})
+    
 
 app.listen(port, () => {
     console.log(`Server working on port ${port}`);
-});
+})
 
-// Update Todo
-// Method: PUT/PATCH
-// Endpoint: /todos/complete
-// Request Body: { "id": "idOfTodo", "completed": true }
-// Response: Updated todo details
