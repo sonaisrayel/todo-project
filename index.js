@@ -51,25 +51,6 @@ app.put('/todos/complete', (req, res) => {
     res.status(200).send(result);
 })
 
-
-
-
-
-app.get ('/todos/complete', (req, res) => {
-    
-    function taskCompl(){
-        let compTasks=[]
-        data.forEach(el =>{
-        
-        if (el.completed==true){
-            compTasks.push(el)
-        }
-        
-        })
-        return compTasks
-    }
-    res.send(taskCompl()) 
-})
     
 
 app.listen(port, () => {
