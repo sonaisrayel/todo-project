@@ -7,37 +7,36 @@ const data = require('./todo.json');
 
 
 
-app.get ('/todos/complete', (req, res) => {
-    
-    function taskCompl(){
-        let compTasks=[]
-        data.forEach(el =>{
-        
-        if (el.completed==true){
+app.get('/todos/complete', (req, res) => {
+
+
+    let compTasks = []
+    data.forEach(el => {
+
+        if (el.completed == true) {
             compTasks.push(el)
         }
-        
-        })
-        return compTasks
-    }
-    res.status(200).send(taskCompl()) 
+
+    })
+
+    res.status(200).send(compTasks)
 })
 
-app.get ('/todos/not-completed', (req, res) => {
-    
-    function taskIncompl(){
-        let incompTasks=[]
-        data.forEach(el =>{
-        
-        if (el.completed==false){
+app.get('/todos/not-completed', (req, res) => {
+
+    let incompTasks = []
+    data.forEach(el => {
+
+        if (el.completed == false) {
             incompTasks.push(el)
         }
-        
-        })
-        return incompTasks
-    }
-    res.status(200).send(taskIncompl()) 
+
+    })
+
+
+    res.status(200).send(incompTasks)
 })
+
 
 app.listen(port, () => {
     console.log(`Server working on port ${port}`);
