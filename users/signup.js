@@ -10,7 +10,9 @@ const signup = (req, res) => {
 
     const errors = validateInputs(username, email, password, repeatPassword, birthday);
 
-    if (errors.length) {return res.status(errors[0].status).send({ message: errors[0].message });}
+    if (errors.length) {
+        return res.status(errors[0].status).send({ message: errors[0].message });
+    }
 
     const user = {
         username,
