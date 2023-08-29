@@ -8,13 +8,11 @@ app.use(bodyParser.json());
 
 const { port } = process.env;
 
-const signup = require('./users/signup');
-
 const todoRouter = require('./routes/todo-router');
+const userRouter = require('./routes/user-router');
 
 app.use('/todos', todoRouter);
-
-app.post('/user/signup', signup);
+app.use('/users', userRouter);
 
 app.listen(port, () => {
     console.log(`Server working on port ${port}`);
