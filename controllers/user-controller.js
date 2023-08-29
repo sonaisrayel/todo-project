@@ -1,11 +1,12 @@
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
+
 const users = require('../users.json');
 
 const regDate = require('../helpers/getRegDate')();
 const { validateInputs } = require('../helpers/validation');
 
-const signup = (req, res) => {
+const createUser = (req, res) => {
     const { username, email, password, repeatPassword, gender, birthday } = req.body;
 
     const errors = validateInputs(username, email, password, repeatPassword, birthday);
@@ -31,4 +32,4 @@ const signup = (req, res) => {
     res.status(201).send({ message: 'User is created', user });
 };
 
-module.exports = signup;
+module.exports = { createUser };
