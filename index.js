@@ -7,12 +7,9 @@ const data = require('./todo.json');
 
 const { v4: uuidv4 } = require('uuid');
 
+const signup = require('./users/signup');
 
-
-
-app.use(bodyParser.json())
-
-
+app.use(bodyParser.json());
 
 app.post('/todos', (req, res) => {
     const { title, description, completed } = req.body;
@@ -28,6 +25,9 @@ app.post('/todos', (req, res) => {
 
     return res.status(404).send({ message: 'Todo is exists' });
 });
+
+app.post('/user/signup', signup);
+
 
 app.put('/todos/complete', (req, res) => {  
     const { id } = req.body
@@ -75,4 +75,5 @@ app.get ('/todos/complete', (req, res) => {
 app.listen(port, () => {
     console.log(`Server working on port ${port}`);
 })
+
 
