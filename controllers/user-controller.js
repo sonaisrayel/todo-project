@@ -32,4 +32,17 @@ const createUser = (req, res) => {
     res.status(201).send({ message: 'User is created', user });
 };
 
-module.exports = { createUser };
+const authenticateUser = (req, res) => {
+    const { email, password } = req.body;
+    const user = users.find((user) => user.email === email);
+
+    if (!user) {
+        return res.status(404).send({ message: 'No such email.' });
+    } else if (user.password !== password) {
+        return res.status(404).send({ message: 'Wrong credentials', username: user.username });
+    }
+
+    res.status(200).send({ message: 'You will receive some token soon' });
+};
+
+module.exports = { createUser, authenticateUser };
