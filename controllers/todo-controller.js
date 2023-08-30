@@ -21,7 +21,7 @@ const createTodo = (req, res) => {
 //
 //     //TODO for Gohar -- please write in filter function
 // };
-
+const completedTodos = () => {};
 const changeStatus = (req, res) => {
     const { id } = req.body;
     const todoId = parseInt(id);
@@ -46,4 +46,5 @@ const changeStatus = (req, res) => {
 module.exports = {
     createTodo,
     changeStatus,
+    completedTodos,
 };
