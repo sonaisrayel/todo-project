@@ -43,7 +43,24 @@ const changeStatus = (req, res) => {
     res.status(200).send(result);
 };
 
+const changeDetails = (req, res) => {
+    const todoID = Number(req.params.id);
+    const todo = data.find((element) => element.id === todoID);
+    if (req.body.title) {
+        todo.title = req.body.title;
+    }
+    if (req.body.description) {
+        todo.description = req.body.description;
+    }
+    if (req.body.completed) {
+        todo.completed = req.body.completed;
+    }
+
+    return res.status(200).send(todo);
+};
+
 module.exports = {
     createTodo,
     changeStatus,
+    changeDetails,
 };
