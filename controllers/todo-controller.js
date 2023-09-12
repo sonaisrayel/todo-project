@@ -64,6 +64,23 @@ const changeStatus = (req, res) => {
     res.status(200).send(result);
 };
 
+const deleteTodos = (req, res) => {
+    const id = req.params.id;
+
+    const ids = data.map((d) => d.id);
+
+    if (!ids.includes(id)) {
+        return res.status(404).send(`todo with id ${id} does not exsists`);
+    }
+
+    const index = data.findIndex((el) => el.id === id);
+    data.splice(index, 1);
+
+    fs.writeFileSync('todo.json', JSON.stringify(data, null, 2));
+    return res.status(200).send(`Title with id "${id}" successfully deleted`);
+  
+}
+
 const compIncompTodos = (req, res) => {
     const { option } = req.params;
 
@@ -79,11 +96,11 @@ const compIncompTodos = (req, res) => {
             res.status(400).send();
         }
     }
+
 };
 
 module.exports = {
     // createTodo,
     createTodoValidate,
     changeStatus,
-    compIncompTodos,
 };
