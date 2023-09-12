@@ -1,8 +1,6 @@
 const users = require('../users.json');
 
-const regDate = require('./getRegDate')();
-
-const validateInputs = (username, email, password, repeatPassword, birthday) => {
+const validateInputs = (username, email, password, repeatPassword, birthday, regDate) => {
     const errors = [];
 
     const userNames = users.map((user) => user.username);

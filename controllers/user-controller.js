@@ -3,13 +3,14 @@ const { v4: uuidv4 } = require('uuid');
 
 const users = require('../users.json');
 
-const regDate = require('../helpers/getRegDate')();
 const { validateInputs } = require('../helpers/validation');
 
 const createUser = (req, res) => {
     const { username, email, password, repeatPassword, gender, birthday } = req.body;
 
-    const errors = validateInputs(username, email, password, repeatPassword, birthday);
+    const regDate = new Date().toISOString().split('T')[0];
+
+    const errors = validateInputs(username, email, password, repeatPassword, birthday, regDate);
 
     if (errors.length) {
         return res.status(errors[0].status).send({ message: errors[0].message });
