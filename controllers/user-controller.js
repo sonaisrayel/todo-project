@@ -30,7 +30,7 @@ const createUser = (req, res) => {
 
     fs.writeFileSync('users.json', JSON.stringify(users, null, 2));
 
-    res.status(201).send({ message: 'User is created', user });
+    res.status(201).send({ message: `User is created, ${user}` });
 };
 
 const authenticateUser = (req, res) => {
@@ -43,6 +43,7 @@ const authenticateUser = (req, res) => {
         return res.status(404).send({ message: 'Wrong credentials', username: user.username });
     }
 
+    //TODO write JWT logic
     res.status(200).send({ message: 'You will receive some token soon' });
 };
 
