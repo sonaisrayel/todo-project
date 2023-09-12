@@ -43,6 +43,12 @@ const createTodoValidate = (req, res) => {
     return res.status(404).send({ message: 'Todo already exists' });
 };
 
+
+// const completedTodos = (req, res) => {
+//
+//     //TODO for Gohar -- please write in filter function
+// };
+
 const changeStatus = (req, res) => {
     const { id } = req.body;
     const todoId = parseInt(id);
@@ -103,4 +109,5 @@ module.exports = {
     // createTodo,
     createTodoValidate,
     changeStatus,
+    completedTodos,
 };
