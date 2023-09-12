@@ -66,7 +66,7 @@ const deleteTodos = (req, res) => {
     return res.status(200).send(`Todo with id "${id}" successfully deleted`);
 };
 
-const compIncompleteTodos = (req, res) => {
+const getTodos = (req, res) => {
     const { option } = req.params;
 
     if (option) {
@@ -78,6 +78,8 @@ const compIncompleteTodos = (req, res) => {
             const falseTask = data.filter((el) => el.completed === false);
             res.status(200).send(falseTask);
         }
+    } else {
+        res.status(200).send(data);
     }
 };
 
@@ -85,5 +87,5 @@ module.exports = {
     createTodo,
     changeStatus,
     deleteTodos,
-    compIncompleteTodos,
+    getTodos,
 };
