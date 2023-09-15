@@ -47,4 +47,42 @@ const authenticateUser = (req, res) => {
     res.status(200).send({ message: 'You will receive some token soon' });
 };
 
-module.exports = { createUser, authenticateUser };
+const getUser = (req, res) => {
+    const userId = Number(req.params.id);
+
+    const getUs = users.find((el) => el.id === userId);
+    if (!getUs) {
+        res.status(404).send('User Not Found');
+    } else {
+        res.status(200).send(getUs);
+    }
+};
+
+const updateUser = (req, res) => {
+    const userId = Number(req.params.id);
+    const body = req.body;
+
+    const user = users.find((element) => element.id === userId);
+    if (!user) {
+        res.status(404).send('User Not Found');
+    } else {
+        const updatedProfile = { ...user, ...body };
+        console.log(updatedProfile);
+        res.status(200).json(updatedProfile);
+    }
+};
+
+const deleteUser = (req, res) => {
+    const userId = Number(req.params.id);
+
+    const usersData = users.filter((el) => el.id !== userId);
+    if (!usersData) {
+        res.status(404).send('User Not Found');
+    } else {
+        res.status(200).send('User successfully deleted');
+        console.log(usersData);
+    }
+    return usersData;
+};
+
+module.exports = { createUser, authenticateUser, getUser, updateUser, deleteUser };

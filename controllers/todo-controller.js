@@ -83,9 +83,28 @@ const getTodos = (req, res) => {
     }
 };
 
+const changeDetails = (req, res) => {
+    let todo = [];
+
+    todo = data.find((element) => {
+        if (req.body.title) {
+            element.title = req.body.title;
+        }
+        if (req.body.description) {
+            element.description = req.body.description;
+        }
+        if (req.body.completed) {
+            element.completed = req.body.completed;
+        }
+        todo.push(element);
+        res.status(200).send(todo);
+    });
+};
+
 module.exports = {
     createTodo,
     changeStatus,
     deleteTodos,
     getTodos,
+    changeDetails,
 };
