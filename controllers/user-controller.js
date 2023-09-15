@@ -1,6 +1,5 @@
-const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
-
+const { saveUsersData } = require('../helpers/saveData');
 const users = require('../users.json');
 
 const { validateInputs } = require('../helpers/validation');
@@ -28,7 +27,7 @@ const createUser = (req, res) => {
 
     users.push(user);
 
-    fs.writeFileSync('users.json', JSON.stringify(users, null, 2));
+    saveUsersData(users);
 
     res.status(201).send({ message: `User is created, ${user}` });
 };
