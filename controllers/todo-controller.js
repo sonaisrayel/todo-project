@@ -1,6 +1,7 @@
 const data = require('../todo.json');
 const { v4: uuidv4 } = require('uuid');
 const { saveTodoData } = require('../helpers/saveData');
+const fs = require('fs');
 
 const createTodo = (req, res) => {
     const { title, description, completed } = req.body;
@@ -101,7 +102,17 @@ const changeDetails = (req, res) => {
     });
 };
 
+const getAllTodos = (req, res) => {
+    const arr = [];
+    data.forEach((element) => {
+        arr.push(element);
+        fs.writeFileSync('newtodo.json', JSON.stringify(arr, null, 2));
+        return res.status(200).send(arr);
+    });
+};
+
 module.exports = {
+    getAllTodos,
     createTodo,
     changeStatus,
     deleteTodos,
