@@ -1,8 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
-const { createTodo, deleteTodos, changeStatus, getTodos, changeDetails } = require('../controllers/todo-controller');
+const {
+    createTodo,
+    deleteTodos,
+    changeStatus,
+    getTodos,
+    changeDetails,
+    getAllTodos,
+} = require('../controllers/todo-controller');
 
+router.get('/getAllTodos', getAllTodos);
 router.post('/', createTodo);
 router.get('/:option?', getTodos);
 router.put('/complete', changeStatus);
