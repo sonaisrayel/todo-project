@@ -1,6 +1,6 @@
 const data = require('../todo.json');
 const { v4: uuidv4 } = require('uuid');
-const { saveTodoData } = require('../helpers/saveData');
+const { saveData } = require('../helpers/saveData');
 const fs = require('fs');
 
 const createTodo = (req, res) => {
@@ -22,7 +22,7 @@ const createTodo = (req, res) => {
 
     if (!titles.includes(title)) {
         data.push({ title, description, completed, id: uuidv4() });
-        saveTodoData(data);
+        saveData(data, 'todo');
 
         return res.send(data);
     }
@@ -45,7 +45,7 @@ const changeStatus = (req, res) => {
         }
     });
 
-    saveTodoData(data);
+    saveData(data, 'todo');
 
     const result = data.find((item) => item.id === todoId);
     res.status(200).send(result);
@@ -63,7 +63,7 @@ const deleteTodos = (req, res) => {
     const todoIndex = data.findIndex((el) => el.id === id);
     data.splice(todoIndex, 1);
 
-    saveTodoData(data);
+    saveData(data, 'todo');
     return res.status(200).send(`Todo with id "${id}" successfully deleted`);
 };
 

@@ -1,5 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
-const { saveUsersData } = require('../helpers/saveData');
+const { saveData } = require('../helpers/saveData');
 const users = require('../users.json');
 
 const { validateInputs } = require('../helpers/validation');
@@ -27,7 +27,7 @@ const createUser = (req, res) => {
 
     users.push(user);
 
-    saveUsersData(users);
+    saveData(users, 'users');
 
     res.status(201).send({ message: `User is created, ${user}` });
 };

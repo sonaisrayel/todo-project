@@ -1,10 +1,11 @@
-const saveTodoData = (someData) => {
-    const fs = require('fs');
-    fs.writeFileSync('./todo.json', JSON.stringify(someData, null, 2));
-};
-const saveUsersData = (someData) => {
-    const fs = require('fs');
-    fs.writeFileSync('./users.json', JSON.stringify(someData, null, 2));
+const fs = require('fs');
+const saveData = (someData, project) => {
+    if (project === 'todo') {
+        fs.writeFileSync('./todo.json', JSON.stringify(someData, null, 2));
+    }
+    if (project === 'users') {
+        fs.writeFileSync('./users.json', JSON.stringify(someData, null, 2));
+    }
 };
 
-module.exports = { saveTodoData, saveUsersData };
+module.exports = { saveData };
