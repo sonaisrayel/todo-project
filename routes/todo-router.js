@@ -13,7 +13,7 @@ const {
 router.get('/getAllTodos', getAllTodos);
 router.post('/', createTodo);
 router.get('/:option?', getTodos);
-router.put('/complete', changeStatus);
+router.put('/:id', changeStatus);
 router.put('/change', changeDetails);
 router.delete('/:id', deleteTodos);
 

@@ -1,54 +1,52 @@
 const data = require('../todo.json');
-const { v4: uuidv4 } = require('uuid');
 const { saveData } = require('../helpers/saveData');
-const fs = require('fs');
 
-const createTodo = (req, res) => {
-    const { title, description, completed } = req.body;
+const { mongoGetTodos } = require('../helpers/mongodb');
 
-    const titles = data.map((d) => d.title);
+const { getAll, create } = require('../helpers/mongodb');
 
-    if (title == null || title === '') {
-        return res.status(400).send({ message: 'Title field is required' });
+const createTodo = async (req, res) => {
+    try {
+        const { title, description, completed } = req.body;
+
+        const titles = data.map((d) => d.title);
+
+        if (title == null || title === '') {
+            throw new Error('Title field is required');
+            // return res.status(400).send({ message: 'Title field is required' });
+        }
+
+        if (description == null || description === '') {
+            return res.status(400).send({ message: 'Description field is required' });
+        }
+
+        if (typeof completed !== 'boolean') {
+            return res.status(400).send({ message: 'Completed field is required' });
+        }
+
+        if (!titles.includes(title)) {
+            const data = await create('todo', { title, description, completed });
+            return res.send(data);
+        }
+
+        return res.status(404).send({ message: 'Todo already exists' });
+    } catch (err) {
+        return res.status(404).send({ message: err.message });
     }
-
-    if (description == null || description === '') {
-        return res.status(400).send({ message: 'Description field is required' });
-    }
-
-    if (typeof completed !== 'boolean') {
-        return res.status(400).send({ message: 'Completed field is required' });
-    }
-
-    if (!titles.includes(title)) {
-        data.push({ title, description, completed, id: uuidv4() });
-        saveData(data, 'todo');
-
-        return res.send(data);
-    }
-
-    return res.status(404).send({ message: 'Todo already exists' });
 };
 
 const changeStatus = (req, res) => {
-    const { id } = req.body;
-    const todoId = parseInt(id);
-    const result_of_id = data.findIndex((d) => d.id === todoId);
+    //TODO need to be changed
+    const { id } = req.params;
+    const { title, description, completed } = req.body;
+    const data = [];
 
-    if (result_of_id === -1) {
-        return res.status(404).send({ message: 'Todo not found' });
+    console.log(id, { title, description, completed });
+    if (title) {
+        data.push(title);
     }
 
-    data.forEach((el) => {
-        if (todoId === el.id) {
-            el.completed = true;
-        }
-    });
-
-    saveData(data, 'todo');
-
-    const result = data.find((item) => item.id === todoId);
-    res.status(200).send(result);
+    res.status(200).send('ok');
 };
 
 const deleteTodos = (req, res) => {
@@ -67,7 +65,7 @@ const deleteTodos = (req, res) => {
     return res.status(200).send(`Todo with id "${id}" successfully deleted`);
 };
 
-const getTodos = (req, res) => {
+const getTodos = async (req, res) => {
     const { option } = req.params;
 
     if (option) {
@@ -80,7 +78,8 @@ const getTodos = (req, res) => {
             res.status(200).send(falseTask);
         }
     } else {
-        res.status(200).send(data);
+        const todoList = await mongoGetTodos();
+        res.status(200).send(todoList);
     }
 };
 
@@ -102,13 +101,13 @@ const changeDetails = (req, res) => {
     });
 };
 
-const getAllTodos = (req, res) => {
-    const arr = [];
-    data.forEach((element) => {
-        arr.push(element);
-        fs.writeFileSync('newtodo.json', JSON.stringify(arr, null, 2));
-        return res.status(200).send(arr);
-    });
+const getAllTodos = async (req, res) => {
+    try {
+        const todos = await getAll('todos');
+        return res.status(200).send(todos);
+    } catch (err) {
+        return res.status(404).send({ message: err.message });
+    }
 };
 
 module.exports = {

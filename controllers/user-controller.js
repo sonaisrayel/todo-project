@@ -1,11 +1,10 @@
-const { v4: uuidv4 } = require('uuid');
 const { saveData } = require('../helpers/saveData');
 const users = require('../users.json');
 
 const { validateInputs } = require('../helpers/validation');
 
-const createUser = (req, res) => {
-    const { username, email, password, repeatPassword, gender, birthday } = req.body;
+const createUser = async (req, res) => {
+    const { username, email, password, repeatPassword, birthday } = req.body;
 
     const regDate = new Date().toISOString().split('T')[0];
 
@@ -15,21 +14,22 @@ const createUser = (req, res) => {
         return res.status(errors[0].status).send({ message: errors[0].message });
     }
 
-    const user = {
-        username,
-        email,
-        password,
-        dateOfRegistration: regDate,
-        gender,
-        birthday,
-        id: uuidv4(),
-    };
+    // const user = {
+    //     username,
+    //     email,
+    //     password,
+    //     dateOfRegistration: regDate,
+    //     gender,
+    //     birthday,
+    // };
 
-    users.push(user);
+    //users.push(user);
+
+    // const response = await createUsersMongo(user)
 
     saveData(users, 'users');
 
-    res.status(201).send({ message: `User is created, ${user}` });
+    //  res.status(201).send({ message: `User is created, ${response.insertedIds[0]}` });
 };
 
 const authenticateUser = (req, res) => {
