@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb');
 
-const MONGO_URI = 'mongodb://localhost:27017';
+const MONGO_URI = 'mongodb+srv://agbu:OhhwbrmP8iDsc7V2@cluster0.w5tklqg.mongodb.net/?retryWrites=true&w=majority';
 const MONGO_DB = 'todo';
 
 let mongoClient;
