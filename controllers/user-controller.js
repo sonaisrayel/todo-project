@@ -1,5 +1,5 @@
-// const { saveData } = require('../helpers/saveData');
-// const users = require('../users.json');
+
+const { getAll } = require('../helpers/mongodb');
 
 const { validateInputs } = require('../helpers/validation');
 
@@ -14,13 +14,8 @@ const getAllUsers = async (req, res) => {
     }
 };
 
-const createUser = async (req, res) => {
-    try {
-        const { username, email, password, repeatPassword, gender, birthday } = req.body;
-
-        const regDate = new Date().toISOString().split('T')[0];
-
-        const errors = await validateInputs(username, email, password, repeatPassword, birthday, regDate);
+const getUser = (req, res) => {
+    const userId = Number(req.params.id);
 
         if (errors.length) {
             return res.status(errors[0].status).send({ message: errors[0].message });
@@ -103,3 +98,4 @@ module.exports = {
     // updateUser,
     // deleteUser
 };
+

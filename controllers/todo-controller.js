@@ -1,6 +1,7 @@
 // const { saveData } = require('../helpers/saveData');
 
 const { getAll, create } = require('../helpers/mongodb');
+const { errorHandling } = require('../helpers/errorHandling');
 
 const getAllTodos = async (req, res) => {
     try {
@@ -18,23 +19,25 @@ const createTodo = async (req, res) => {
         const titles = todos.map((d) => d.title);
 
         if (title == null || title === '') {
-            throw new Error('Title field is required');
+            errorHandling('Title field is required');
         }
 
         if (description == null || description === '') {
-            throw new Error('Description field is required');
+            // return res.status(400).send({ message: 'Description field is required' });
+            errorHandling('Description field is required');
         }
 
         if (typeof completed !== 'boolean') {
-            throw new Error('Completed field is required');
-        }
+            // return res.status(400).send({ message: 'Completed field is required' });
+            errorHandling('Completed field is required');
 
         if (!titles.includes(title)) {
             await create('todos', req.body);
             return res.status(200).send(`Todo with title "${title}" successfully created`);
         }
 
-        return res.status(404).send({ message: 'Todo already exists' });
+        errorHandling('Todo already exists');
+        // return res.status(404).send({ message: 'Todo already exists' });
     } catch (err) {
         return res.status(404).send({ message: err.message });
     }
