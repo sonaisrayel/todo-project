@@ -1,4 +1,6 @@
-const { saveData } = require('../helpers/saveData');
+const { v4: uuidv4 } = require('uuid');
+const { getAll } = require('../helpers/mongodb');
+
 const users = require('../users.json');
 
 const { validateInputs } = require('../helpers/validation');
@@ -46,6 +48,18 @@ const authenticateUser = (req, res) => {
     res.status(200).send({ message: 'You will receive some token soon' });
 };
 
+// const getAllUsers = async (req, res) => {
+//     const users = await getAll('users');
+//     return res.status(200).send(users)
+// };
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await getAll('users');
+        return res.status(200).send(users);
+    } catch (err) {
+        return res.status(404).send({ message: err.message });
+    }
+};
 const getUser = (req, res) => {
     const userId = Number(req.params.id);
 
@@ -84,4 +98,4 @@ const deleteUser = (req, res) => {
     return usersData;
 };
 
-module.exports = { createUser, authenticateUser, getUser, updateUser, deleteUser };
+module.exports = { createUser, getAllUsers, authenticateUser, getUser, updateUser, deleteUser };
