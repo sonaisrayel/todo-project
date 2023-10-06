@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb');
-
-const MONGO_URI = 'mongodb+srv://agbu:OhhwbrmP8iDsc7V2@cluster0.w5tklqg.mongodb.net/?retryWrites=true&w=majority';
+const { URI } = process.env;
+const MONGO_URI = URI;
 const MONGO_DB = 'todo';
 
 let mongoClient;
@@ -27,7 +27,7 @@ const getAll = async (collection) => {
         const coll = dbConnection.db(MONGO_DB).collection(collection);
         return await coll.find({}).toArray();
     } catch (e) {
-        throw new Error(`Error in todos ${e.message}`);
+        throw new Error(`Error in ${collection} ${e.message}`);
     }
 };
 
@@ -36,28 +36,28 @@ const create = async (collection, data) => {
         if (!dbConnection) {
             await establishConnection();
         }
-        const coll = dbConnection.db(MONGO_DB).collection(`${collection}`);
+        const coll = dbConnection.db(MONGO_DB).collection(collection);
         return await coll.insertOne(data);
     } catch (e) {
-        throw new Error(`Error in users ${e.message}`);
+        throw new Error(`Error in ${collection} ${e.message}`);
     }
 };
 
-//TODO need to change for some generic solution
-const edit = async (collection, id, data) => {
-    try {
-        if (!dbConnection) {
-            await establishConnection();
-        }
-        const coll = dbConnection.db(MONGO_DB).collection(`${collection}`);
-        return await coll.updateOne(id, data);
-    } catch (e) {
-        throw new Error(`Error in users ${e.message}`);
-    }
-};
+// //TODO need to change for some generic solution
+// const edit = async (collection, id, data) => {
+//     try {
+//         if (!dbConnection) {
+//             await establishConnection();
+//         }
+//         const coll = dbConnection.db(MONGO_DB).collection(`${collection}`);
+//         return await coll.updateOne(id, data);
+//     } catch (e) {
+//         throw new Error(`Error in users ${e.message}`);
+//     }
+// };
 
 module.exports = {
     getAll,
     create,
-    edit,
+    // edit,
 };
