@@ -1,7 +1,8 @@
 const { MongoClient } = require('mongodb');
-const { URI } = process.env;
-const MONGO_URI = URI;
+const { MONGO_URI } = process.env;
 const MONGO_DB = 'todo';
+
+const { ObjectId } = require('mongodb');
 
 let mongoClient;
 let dbConnection;
@@ -18,19 +19,6 @@ const establishConnection = async () => {
     }
 };
 
-const getAll = async (collection) => {
-    try {
-        if (!dbConnection) {
-            await establishConnection();
-        }
-
-        const coll = dbConnection.db(MONGO_DB).collection(collection);
-        return await coll.find({}).toArray();
-    } catch (e) {
-        throw new Error(`Error in ${collection} ${e.message}`);
-    }
-};
-
 const create = async (collection, data) => {
     try {
         if (!dbConnection) {
@@ -43,21 +31,48 @@ const create = async (collection, data) => {
     }
 };
 
-// //TODO need to change for some generic solution
-// const edit = async (collection, id, data) => {
-//     try {
-//         if (!dbConnection) {
-//             await establishConnection();
-//         }
-//         const coll = dbConnection.db(MONGO_DB).collection(`${collection}`);
-//         return await coll.updateOne(id, data);
-//     } catch (e) {
-//         throw new Error(`Error in users ${e.message}`);
-//     }
-// };
+const read = async (collection, id = '') => {
+    try {
+        if (!dbConnection) {
+            await establishConnection();
+        }
+
+        const coll = dbConnection.db(MONGO_DB).collection(`${collection}`);
+        const data = id ? await coll.findOne({ _id: new ObjectId(id) }) : await coll.find({}).toArray();
+
+        return data;
+    } catch (e) {
+        throw new Error(`Error in ${collection} ${e.message}`);
+    }
+};
+
+const update = async (collection, id, data) => {
+    try {
+        if (!dbConnection) {
+            await establishConnection();
+        }
+        const coll = dbConnection.db(MONGO_DB).collection(`${collection}`);
+        return await coll.updateOne(id, { $set: { data } });
+    } catch (e) {
+        throw new Error(`Error in users ${e.message}`);
+    }
+};
+
+const del = async (collection, id) => {
+    try {
+        if (!dbConnection) {
+            await establishConnection();
+        }
+        const coll = dbConnection.db(MONGO_DB).collection(`${collection}`);
+        return await coll.deleteOne({ _id: new ObjectId(id) });
+    } catch (e) {
+        throw new Error(`Error in ${collection} ${e.message}`);
+    }
+};
 
 module.exports = {
-    getAll,
+    read,
     create,
-    // edit,
+    update,
+    del,
 };
