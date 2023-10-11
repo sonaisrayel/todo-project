@@ -9,9 +9,8 @@ const {
     // getTodos,
     // changeDetails,
 } = require('../controllers/todo-controller');
-
-router.get('/:option?', getTodos);
 router.post('/', createTodo);
+router.get('/:option?', getTodos);
 // router.put('/:id', changeStatus);
 // router.put('/change', changeDetails);
 router.delete('/:id', deleteTodos);
