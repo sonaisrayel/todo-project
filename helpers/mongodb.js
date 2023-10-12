@@ -31,7 +31,7 @@ const create = async (collection, data) => {
     }
 };
 
-const read = async (collection, id = '') => {
+const read = async (collection, id) => {
     try {
         if (!dbConnection) {
             await establishConnection();
@@ -52,9 +52,9 @@ const update = async (collection, id, data) => {
             await establishConnection();
         }
         const coll = dbConnection.db(MONGO_DB).collection(`${collection}`);
-        return await coll.updateOne(id, { $set: { data } });
+        return await coll.updateOne({ _id: new ObjectId(id) }, { $set: { data } });
     } catch (e) {
-        throw new Error(`Error in users ${e.message}`);
+        throw new Error(`Error in ${collection} ${e.message}`);
     }
 };
 

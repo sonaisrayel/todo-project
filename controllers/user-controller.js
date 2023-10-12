@@ -1,26 +1,37 @@
-// // const { getAll} = require('../helpers/mongodb');
-//
-// const getAllUsers = async (req, res) => {
-//     try {
-//         const users = await getAll('users');
-//         return res.status(200).send(users);
-//     } catch (err) {
-//         return res.status(404).send({ message: err.message });
-//     }
-// };
-//
-// const getUser = async (req, res) => {
-//     const { id } = req.params;
-//
-//     // const user = await getAll('users', id);
-//
-//
-//     // if (!getUs) {
-//     //     res.status(404).send('User Not Found');
-//     // } else {
-//     //     res.status(200).send(getUs);
-//     // }
-// };
+const { errorHandling } = require('../helpers/errorHandling');
+const { read, create, update, del } = require('../helpers/mongodb');
+
+const getUsers = async (req, res) => {
+    try {
+        const users = await read('users');
+        return res.status(200).send(users);
+    } catch (err) {
+        return res.status(404).send({ message: err.message });
+    }
+};
+
+const createUser = async (req, res) => {
+    try {
+        const { username, email, password, birthday } = req.body;
+        if (username == null || username === '') {
+            errorHandling(`Username field is required`);
+        }
+        if (email == null || email === '') {
+            errorHandling(`Email field is required`);
+        }
+        if (password == null || password === '') {
+            errorHandling(`Password field is required`);
+        }
+        if (birthday == null || birthday === '') {
+            errorHandling(`Birthday field is required`);
+        }
+        await create('users', req.body);
+        return res.status(200).send(`User ${username} successfully created`);
+    } catch (e) {
+        return res.status(404).send({ message: e.message });
+    }
+};
+
 //
 // const authenticateUser = (req, res) => {
 //     const { email, password } = req.body;
@@ -36,37 +47,44 @@
 //     res.status(200).send({ message: 'You will receive some token soon' });
 // };
 //
-// const updateUser = (req, res) => {
-//     const userId = Number(req.params.id);
-//     const body = req.body;
 //
-//     const user = users.find((element) => element.id === userId);
-//     if (!user) {
-//         res.status(404).send('User Not Found');
-//     } else {
-//         const updatedProfile = { ...user, ...body };
-//         console.log(updatedProfile);
-//         res.status(200).json(updatedProfile);
-//     }
-// };
-//
-// const deleteUser = (req, res) => {
-//     const userId = Number(req.params.id);
-//
-//    // const usersData = users.filter((el) => el.id !== userId);
-//    //  if (!usersData) {
-//    //      res.status(404).send('User Not Found');
-//    //  } else {
-//    //      res.status(200).send('User successfully deleted');
-//    //      console.log(usersData);
-//    //  }
-//    //  return usersData;
-// };
-//
-// module.exports = {
-//     getAllUsers,
-//     getUser,
-//     authenticateUser,
-//     updateUser,
-//     deleteUser,
-// };
+
+const editUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const data = {};
+        Object.keys(req.body).forEach(function (prop) {
+            data[prop] = req.body[prop];
+        });
+
+        const user = await read('users', id);
+        if (!user) {
+            errorHandling('User Not Found');
+        } else {
+            await update('users', id, data);
+            return res.status(200).send(`User profile successfully edited.`);
+        }
+    } catch (e) {
+        return res.status(404).send({ message: e.message });
+    }
+};
+
+const deleteUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const res = await del('users', id);
+        if (!res.deleteCount) {
+            errorHandling(`ID is not found`);
+        }
+        return res.status(200).send({ message: `User with ID ${id} successfully deleted` });
+    } catch (e) {
+        res.status(404).send({ message: e.message });
+    }
+};
+
+module.exports = {
+    getUsers,
+    createUser,
+    editUser,
+    deleteUser,
+};
