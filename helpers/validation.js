@@ -1,4 +1,4 @@
-const { getAll } = require('../helpers/mongodb');
+const { getAll } = require('../libs/mongodb');
 
 // const users = (async()=>{await getAll('users')})();
 

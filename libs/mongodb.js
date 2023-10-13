@@ -31,14 +31,17 @@ const create = async (collection, data) => {
     }
 };
 
-const read = async (collection, id) => {
+const read = async (collection) => {
     try {
+        //TODO write query based on params
+        const query = { $and: [{ _id: new ObjectId('652553c46fb7486cae025882') }, {}] };
+
         if (!dbConnection) {
             await establishConnection();
         }
 
         const coll = dbConnection.db(MONGO_DB).collection(`${collection}`);
-        const data = id ? await coll.findOne({ _id: new ObjectId(id) }) : await coll.find({}).toArray();
+        const data = await coll.find(query).toArray();
 
         return data;
     } catch (e) {
@@ -46,13 +49,14 @@ const read = async (collection, id) => {
     }
 };
 
-const update = async (collection, id, data) => {
+const update = async (collection, id, title) => {
     try {
         if (!dbConnection) {
             await establishConnection();
         }
         const coll = dbConnection.db(MONGO_DB).collection(`${collection}`);
-        return await coll.updateOne({ _id: new ObjectId(id) }, { $set: { data } });
+        //TODO write function for this query
+        return await coll.updateOne({ _id: new ObjectId(id) }, { $set: { title } });
     } catch (e) {
         throw new Error(`Error in ${collection} ${e.message}`);
     }
