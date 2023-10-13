@@ -1,5 +1,5 @@
-const { errorHandling } = require('../helpers/errorHandling');
-const { read, create, update, del } = require('../helpers/mongodb');
+const { errorHandling } = require('../errors/errorHandling');
+const { read, create, update, del } = require('../libs/mongodb');
 
 const getUsers = async (req, res) => {
     try {

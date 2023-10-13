@@ -1,30 +1,18 @@
 // const { saveData } = require('../helpers/saveData');
 
-const { create, read, update, del } = require('../helpers/mongodb');
-const { errorHandling } = require('../helpers/errorHandling');
+const { create, read, update, del } = require('../libs/mongodb');
+const { errorHandling } = require('../errors/errorHandling');
 
 const getTodos = async (req, res) => {
     try {
-        const { option } = req.params;
-        const todos = await read('todos');
+        //  const { id, title, complete } = req.query;
+
+        const todos = await read('todos', req.query);
+        return res.status(200).send(todos);
 
         //TODO create filter for complete/incomplete in MongoDB
-        // if (option) {
-        //     if (option === 'complete') {
-        //         const trueTask = todos.filter((el) => el.completed === true);
-        //         return res.status(200).send(trueTask);
-        //     }
 
-        //     if (option === 'incomplete') {
-        //         const falseTask = todos.filter((el) => el.completed === false);
-        //         res.status(200).send(falseTask);
-        //     }
-        res.status(200).send(todos);
-
-        if (option === req.params.id) {
-            const todo = todos.filter((el) => el.id === req.params.id);
-            return res.status(200).send(todo);
-        }
+        // res.status(200).send(todos);
     } catch (e) {
         return res.status(404).send({ message: e.message });
     }
@@ -56,14 +44,15 @@ const createTodo = async (req, res) => {
 const editTodo = async (req, res) => {
     try {
         const { id } = req.params;
+        const { title } = req.body;
         // const { title, description, completed } = req.body;
 
         const todo = await read('todos', id);
         if (!todo) {
             errorHandling('Todo Not Found');
         } else {
-            const updatedTodo = { ...todo, ...req.body };
-            await update('todos', id, updatedTodo);
+            // const updatedTodo = {...req.body };
+            await update('todos', id, title);
             return res.status(200).send(`Todo successfully edited.`);
         }
     } catch (e) {
