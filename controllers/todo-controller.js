@@ -1,25 +1,32 @@
 // const { saveData } = require('../helpers/saveData');
 
-const { create, read, del } = require('../helpers/mongodb');
+const { create, read, update, del } = require('../helpers/mongodb');
 const { errorHandling } = require('../helpers/errorHandling');
 
 const getTodos = async (req, res) => {
-    const { option } = req.params;
-    const todos = await read('todos');
+    try {
+        const { option } = req.params;
+        const todos = await read('todos');
 
-    //TODO create filter for complete/incomplete in MongoDB
-    if (option) {
-        if (option === 'complete') {
-            const trueTask = todos.filter((el) => el.completed === true);
-            return res.status(200).send(trueTask);
-        }
+        //TODO create filter for complete/incomplete in MongoDB
+        // if (option) {
+        //     if (option === 'complete') {
+        //         const trueTask = todos.filter((el) => el.completed === true);
+        //         return res.status(200).send(trueTask);
+        //     }
 
-        if (option === 'incomplete') {
-            const falseTask = todos.filter((el) => el.completed === false);
-            res.status(200).send(falseTask);
-        }
-    } else {
+        //     if (option === 'incomplete') {
+        //         const falseTask = todos.filter((el) => el.completed === false);
+        //         res.status(200).send(falseTask);
+        //     }
         res.status(200).send(todos);
+
+        if (option === req.params.id) {
+            const todo = todos.filter((el) => el.id === req.params.id);
+            return res.status(200).send(todo);
+        }
+    } catch (e) {
+        return res.status(404).send({ message: e.message });
     }
 };
 
@@ -46,18 +53,22 @@ const createTodo = async (req, res) => {
     }
 };
 
-const changeStatus = (req, res) => {
-    //TODO need to be changed
-    const { id } = req.params;
-    const { title, description, completed } = req.body;
-    const data = [];
+const editTodo = async (req, res) => {
+    try {
+        const { id } = req.params;
+        // const { title, description, completed } = req.body;
 
-    console.log(id, { title, description, completed });
-    if (title) {
-        data.push(title);
+        const todo = await read('todos', id);
+        if (!todo) {
+            errorHandling('Todo Not Found');
+        } else {
+            const updatedTodo = { ...todo, ...req.body };
+            await update('todos', id, updatedTodo);
+            return res.status(200).send(`Todo successfully edited.`);
+        }
+    } catch (e) {
+        return res.status(404).send({ message: e.message });
     }
-
-    res.status(200).send('ok');
 };
 
 const deleteTodos = async (req, res) => {
@@ -73,27 +84,9 @@ const deleteTodos = async (req, res) => {
     }
 };
 
-// const changeDetails = (req, res) => {
-//     let todo = [];
-//
-//     todo = data.find((element) => {
-//         if (req.body.title) {
-//             element.title = req.body.title;
-//         }
-//         if (req.body.description) {
-//             element.description = req.body.description;
-//         }
-//         if (req.body.completed) {
-//             element.completed = req.body.completed;
-//         }
-//         todo.push(element);
-//         res.status(200).send(todo);
-//     });
-// };
-
 module.exports = {
     createTodo,
-    changeStatus,
+    editTodo,
     deleteTodos,
     getTodos,
 };
