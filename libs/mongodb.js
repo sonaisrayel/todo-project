@@ -37,7 +37,7 @@ const read = async (collection, params) => {
     try {
         //TODO write query based on params
 
-        const query = { $or: [{ _id: new ObjectId(params.id) }, ...generateQuery(params)] };
+        const query = await generateQuery(params);
 
         if (!dbConnection) {
             await establishConnection();

@@ -5,11 +5,24 @@ const generateQuery = (params) => {
         params.completed = false;
     }
 
-    const arr = [];
-    for (const key in params) {
-        arr.push({ [key]: params[key] });
+    const object = {};
+
+    if (Object.keys(params).length === 0) {
+        return object;
     }
-    return arr;
+
+    object['$or'] = [];
+    for (const key in params) {
+        object['$or'].push({ [key]: params[key] });
+    }
+
+    const arr = object['$or'];
+    arr.forEach((e, index) => {
+        if (e['id']) {
+            arr[index] = { _id: 'new ObjectId(' + `${params.id}` + ')' };
+        }
+    });
+    return object;
 };
 
 module.exports = { generateQuery };
