@@ -4,6 +4,8 @@ const MONGO_DB = 'todo';
 
 const { ObjectId } = require('mongodb');
 
+const { generateQuery } = require('../helpers/mongodb-helper.js');
+
 let mongoClient;
 let dbConnection;
 
@@ -31,16 +33,17 @@ const create = async (collection, data) => {
     }
 };
 
-const read = async (collection) => {
+const read = async (collection, params) => {
     try {
         //TODO write query based on params
-        const query = { $and: [{ _id: new ObjectId('652553c46fb7486cae025882') }, {}] };
+
+        const query = await generateQuery(params);
 
         if (!dbConnection) {
             await establishConnection();
         }
 
-        const coll = dbConnection.db(MONGO_DB).collection(`${collection}`);
+        const coll = dbConnection.db(MONGO_DB).collection(collection);
         const data = await coll.find(query).toArray();
 
         return data;
@@ -54,7 +57,7 @@ const update = async (collection, id, title) => {
         if (!dbConnection) {
             await establishConnection();
         }
-        const coll = dbConnection.db(MONGO_DB).collection(`${collection}`);
+        const coll = dbConnection.db(MONGO_DB).collection(collection);
         //TODO write function for this query
         return await coll.updateOne({ _id: new ObjectId(id) }, { $set: { title } });
     } catch (e) {
@@ -67,7 +70,7 @@ const del = async (collection, id) => {
         if (!dbConnection) {
             await establishConnection();
         }
-        const coll = dbConnection.db(MONGO_DB).collection(`${collection}`);
+        const coll = dbConnection.db(MONGO_DB).collection(collection);
         return await coll.deleteOne({ _id: new ObjectId(id) });
     } catch (e) {
         throw new Error(`Error in ${collection} ${e.message}`);
